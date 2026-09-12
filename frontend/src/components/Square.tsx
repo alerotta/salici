@@ -6,9 +6,10 @@ interface SquareProps {
     dark: boolean
     selected: boolean
     onClick: (name: SquareName) => void;
+    image?: string
 }
 
-function Square({ name, dark, selected, onClick }: SquareProps) {
+function Square({ name, dark, selected, onClick, image }: SquareProps) {
     return (
         <ButtonBase
             onClick={() => onClick(name)}
@@ -19,7 +20,15 @@ function Square({ name, dark, selected, onClick }: SquareProps) {
                 borderRadius: 0,
             }}
         >
-            {name}
+            {image ? <img
+                src={image}
+                alt=""
+                draggable={false}
+                style={{
+                    width: "80%",
+                    height: "80%",
+                    objectFit: "contain",
+                }} /> : name}
         </ButtonBase>
     )
 }

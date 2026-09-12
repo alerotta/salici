@@ -1,4 +1,11 @@
 type File = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h";
 type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
+
 export type SquareName = `${File}${Rank}`;
+
+export type FenPiece =
+    | "p" | "r" | "n" | "b" | "q" | "k"
+    | "P" | "R" | "N" | "B" | "Q" | "K";
+
+export type Position = Partial<Record<SquareName, FenPiece>>;
