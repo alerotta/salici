@@ -1,4 +1,4 @@
-import { createServer } from "node:http";
+import { Controller, Get } from "@nestjs/common";
 
 const sampleFens = [
   // Zukertort – Blackburne, London 1883, after 10...Ne4
@@ -37,17 +37,10 @@ function getFen(): string {
   return sampleFens[i]!;
 }
 
-const server = createServer((req, res) => {
-  if (req.url == "/game" && req.method === "GET") {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({ fen: getFen() }));
-    return;
+@Controller("game")
+export class GameController {
+  @Get()
+  getGame() {
+    return { fen: getFen() };
   }
-});
-
-const PORT = 3000;
-
-server.listen(PORT, () => {
-  console.log(`server listening on http://localhost:${PORT}`);
-});
+}
