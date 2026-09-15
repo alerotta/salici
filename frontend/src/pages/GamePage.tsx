@@ -15,7 +15,7 @@ function GamePage() {
           boxSizing: "border-box",
         }}
       >
-        <Board />
+        <Board color="b" />
 
       </Box>
       <Button

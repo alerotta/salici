@@ -1,12 +1,11 @@
 import { Box } from "@mui/material";
 import Square from "./Square"
 import type { SquareName, Position, FenPiece, Color } from "../types/chess";
-import { useState } from "react";
+import { fetchInitialFen } from "../api/games";
+import { useState, useEffect } from "react";
 
-const color = "W" as Color
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"] as const;
 const ranks = [8, 7, 6, 5, 4, 3, 2, 1] as const;
-const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 
 const pieceImages: Record<FenPiece, string> = {
   p: "/pieces/PawnBlack.svg",
@@ -23,10 +22,30 @@ const pieceImages: Record<FenPiece, string> = {
   R: "/pieces/RookWhite.svg",
 }
 
-function Board() {
+interface BoardProps {
+  color: Color
+}
+
+function Board({ color }: BoardProps) {
 
   const [SelectedSquare, setSelectedSquare] = useState<SquareName | null>(null);
-  const [position, SetPosition] = useState<Position>(() => parseFen(fen));
+  const [position, SetPosition] = useState<Position>({});
+
+  useEffect(() => {
+
+    // function definition
+    async function loadPosition() {
+      try {
+        const fen = await fetchInitialFen();
+        SetPosition(parseFen(fen));
+      } catch (error) {
+        console.error("Could not load the position:", error);
+      }
+    }
+
+    // function call
+    loadPosition();
+  }, []);
 
   function canSelectPiece(piece: FenPiece | undefined): Boolean {
 
@@ -35,7 +54,7 @@ function Board() {
     const isPieceUppercase = piece === piece.toUpperCase()
     const isPlayerUppercase = color === color.toUpperCase()
 
-    return isPieceUppercase && isPlayerUppercase
+    return isPieceUppercase === isPlayerUppercase
   }
   function handleSquareClick(name: SquareName) {
 
