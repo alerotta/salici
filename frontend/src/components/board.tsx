@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import Square from "./Square"
-import type { SquareName, Position, FenPiece } from "../types/chess";
+import type { SquareName, Position, FenPiece, Color } from "../types/chess";
 import { useState } from "react";
 
+const color = "W" as Color
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"] as const;
 const ranks = [8, 7, 6, 5, 4, 3, 2, 1] as const;
 const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
@@ -27,6 +28,15 @@ function Board() {
   const [SelectedSquare, setSelectedSquare] = useState<SquareName | null>(null);
   const [position, SetPosition] = useState<Position>(() => parseFen(fen));
 
+  function canSelectPiece(piece: FenPiece | undefined): Boolean {
+
+    if (!piece) return false
+
+    const isPieceUppercase = piece === piece.toUpperCase()
+    const isPlayerUppercase = color === color.toUpperCase()
+
+    return isPieceUppercase && isPlayerUppercase
+  }
   function handleSquareClick(name: SquareName) {
 
     // deselect on double click on same square
@@ -37,7 +47,7 @@ function Board() {
 
     // no square selected
     if (SelectedSquare == null) {
-      if (position[name]) {
+      if (canSelectPiece(position[name])) {
         setSelectedSquare(name)
       }
       return
