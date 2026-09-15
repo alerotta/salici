@@ -28,7 +28,7 @@ function Square({ name, dark, selected, onClick, image }: SquareProps) {
                     width: "80%",
                     height: "80%",
                     objectFit: "contain",
-                }} /> : name}
+                }} /> : null}
         </ButtonBase>
     )
 }

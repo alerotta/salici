@@ -25,13 +25,41 @@ const pieceImages: Record<FenPiece, string> = {
 function Board() {
 
   const [SelectedSquare, setSelectedSquare] = useState<SquareName | null>(null);
+  const [position, SetPosition] = useState<Position>(() => parseFen(fen));
 
   function handleSquareClick(name: SquareName) {
-    setSelectedSquare(name);
+
+    // deselect on double click on same square
+    if (SelectedSquare == name) {
+      setSelectedSquare(null)
+      return
+    }
+
+    // no square selected
+    if (SelectedSquare == null) {
+      if (position[name]) {
+        setSelectedSquare(name)
+      }
+      return
+    }
+
+    //first click is non empty
+
+    const piece = position[SelectedSquare];
+    // another check that piece exist
+    if (!piece) {
+      setSelectedSquare(null)
+      return
+    }
+    const nextPosition: Position = { ...position }
+    nextPosition[name] = piece
+    delete nextPosition[SelectedSquare]
+
+    SetPosition(nextPosition)
+    setSelectedSquare(null)
   }
 
   function renderBoard() {
-    const position = parseFen(fen);
 
     return ranks.map((rank, rowIndex) =>
       files.map((file, columnIndex) => {
