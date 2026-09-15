@@ -6,7 +6,8 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new AllExceptionsFilter());
-  await app.listen(3000);
+  const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+  await app.listen(port);
   console.log("server listening on http://localhost:3000");
 }
 
