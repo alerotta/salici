@@ -9,3 +9,4 @@ export type FenPiece =
     | "P" | "R" | "N" | "B" | "Q" | "K";
 
 export type Position = Partial<Record<SquareName, FenPiece>>;
+export type Color = "W" | "b"
